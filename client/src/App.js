@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import {Route } from 'react-router-dom';
 import SavedList from './Movies/SavedList';
+import MovieList from './Movies/MovieList';
+import Movie from './Movies/Movie';
 
 export default function App () {
   const [saved, setSaved] = useState([]); // Stretch: the ids of "saved" movies
@@ -10,10 +12,9 @@ export default function App () {
   useEffect(() => {
     const getMovies = () => {
       axios
-        .get('http://localhost:5000/api/movies') // Study this endpoint with Postman
-        .then(response => {
-          // Study this response with a breakpoint or log statements
-          // and set the response data as the 'movieList' slice of state
+        .get('http://localhost:5000/api/movies')
+        .then(res => {
+          setMovieList(res.data);
         })
         .catch(error => {
           console.error('Server Error', error);
@@ -26,11 +27,45 @@ export default function App () {
     // This is stretch. Prevent the same movie from being "saved" more than once
   };
 
+  // const params = useParams();
+  // console.log(params,'params');
+
   return (
     <div>
       <SavedList list={[ /* This is stretch */]} />
+{/* URL slug/param */}
+{/* use : before banana */}
+      
+      <Route exact path='/'>
+        <MovieList movies={movieList}/>
+      </Route>
 
-      <div>Replace this Div with your Routes</div>
+
+      <Route path={`/movies/:id`}>
+        <Movie />
+      </Route>
+      
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+//       {/* <Route path='' render={ ()=>{
+//         return <div>Hello!</div>
+//       }}/> */}
+
+//       {/* <Route path='/' component={Home}/> */}
+
+
+// {/* //TODO /movies/ is not specific enough */}
+//       {/* <Route path='/movies/'>
+//         <Movie movies={movieList}/>
+//       </Route> */}
+
