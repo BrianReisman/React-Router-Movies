@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {useParams} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 export default function Movie(props) {
+  const {goBack} = useHistory();
   const [movie, setMovie] = useState();
+  const { id } = useParams();
+console.log(id);
 
-  let id = 1;
+  // let id = 1;
   // Change ^^^ that line and use a hook to obtain the :id parameter from the URL
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/movies/${id}`) // Study this endpoint with Postman
+      .get(`http://localhost:5000/api/movies/${id}`)
       .then(response => {
-        // Study this response with a breakpoint or log statements
+        console.log(response.data)
+        setMovie(response.data)
         // and set the response data as the 'movie' slice of state
       })
       .catch(error => {
@@ -19,7 +25,7 @@ export default function Movie(props) {
       });
     // This effect should run every time time
     // the `id` changes... How could we do this?
-  }, []);
+  }, [id]);
 
   // Uncomment this only when you have moved on to the stretch goals
   // const saveMovie = evt => { }
@@ -48,7 +54,7 @@ export default function Movie(props) {
           </div>
         ))}
       </div>
-      <div className="save-button">Save</div>
+      <div className="save-button" onClick={()=>(goBack(-1))}>Save</div>
     </div>
   );
 }
